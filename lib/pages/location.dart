@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:time_app/services/world_time.dart';
 
 class Location extends StatefulWidget {
@@ -9,7 +12,13 @@ class Location extends StatefulWidget {
 }
 
 class _LocationState extends State<Location> {
-  //List of all locations
+  // Todo: Get all the locations provided by the api.
+  // void getLocations() {
+  //   Future<Response> locationsData =
+  //     get(Uri.parse("http://worldtimeapi.org/api/timezone/"));
+  // }
+
+  //List of some defined locations
   List<WorldTime> locations = [
     WorldTime(url: 'Europe/London', location: 'London', flag: 'uk.png'),
     WorldTime(url: 'Europe/Berlin', location: 'Athens', flag: 'greece.png'),
