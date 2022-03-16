@@ -12,18 +12,34 @@ class Location extends StatefulWidget {
 }
 
 class _LocationState extends State<Location> {
-  // Todo: Get all the locations provided by the api.
-  // void getLocations() {
-  //   Future<Response> locationsData =
-  //     get(Uri.parse("http://worldtimeapi.org/api/timezone/"));
-  // }
+  @override
+  void initState() {
+    super.initState();
+    getLocationsData();
+  }
 
-  //List of some defined locations
-  List<WorldTime> locations = [
-    WorldTime(url: 'Europe/London', location: 'London', flag: 'uk.png'),
-    WorldTime(url: 'Europe/Berlin', location: 'Athens', flag: 'greece.png'),
-    WorldTime(url: 'Africa/Cairo', location: 'Cairo', flag: 'egypt.png'),
-  ];
+  Future<void> getLocationsData() async {
+    Response locationsData =
+        await get(Uri.parse("http://worldtimeapi.org/api/timezone/"));
+    List locationData = jsonDecode(locationsData.body);
+    for (var i = 0; i < locationData.length; i++) {
+      String tempURL = locationData[i].toString();
+      List tempLocation = locationData[i].toString().split("/");
+
+      locations.add(WorldTime(
+        location: !locationData[i].toString().contains("/")
+            ? tempLocation[0].toString()
+            : tempLocation[1].toString(),
+        flag: 'lib/images/flag.png',
+        url: tempURL,
+      ));
+    }
+    setState(() {
+      locations;
+    });
+  }
+
+  List<WorldTime> locations = [];
 
   //Sending data of the new selected location.
   void updateTime(index) async {
@@ -56,7 +72,9 @@ class _LocationState extends State<Location> {
                 updateTime(index);
               }),
               title: Text(locations[index].location),
-              leading: const CircleAvatar(backgroundImage: AssetImage('')),
+              leading: const CircleAvatar(
+                backgroundImage: AssetImage('lib/images/flag.png'),
+              ),
             )),
           );
         },
